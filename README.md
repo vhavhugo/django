@@ -78,3 +78,52 @@ python manage.py migrate
 
 Conectando a outros bancos de dados
 O Django possui suporte há vários tipos de bancos de dados. A conexão com todos eles podem ser vistos na própria documentação do Django: https://docs.djangoproject.com/en/2.1/ref/databases/#connecting-to-the-database
+
+# Criando model
+
+class Cliente(models.Model):
+    SEXO_CHOICES = (
+        ("F", "Feminino"),
+        ("M", "Masculino"),
+        ("N", "Nenhuma das opções"),
+    )
+    nome = models.CharField(max_length=100, null=False, blank=False)
+    data_nascimento = models.DateField(null=False, blank=False)
+    email = models.EmailField(null=False, blank=False)
+    profissao = models.CharField(max_length=50, null=False, blank=False)
+    sexo = models.CharField(max_length=1, choices=SEXO_CHOICES)
+
+    def __str__(self):
+        return self.nome
+
+    # Configuração do models no settings.py
+    INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'clientes'
+]
+
+keila@DESKTOP-GKBC5FE MINGW64 /c/projetos/django/fundamentos/tw_clientes (upload)
+$ python manage.py makemigrations
+
+Entendendo o parâmetro request
+Quando uma requisição é enviada através do Django, a view recebe um objeto request. Este objeto é de grande importância pois é ele quem possui todos os metadados da requisição.
+
+Estes metadados são dos mais variados, como:
+
+HttpRequest.scheme: Representa o tipo de requisição (http ou https);
+HttpRequest.path: Retorna o caminho completo da rota que foi executada anteriormente;
+HttpRequest.method: Retorna o método utilizado na requisição (GET, POST, PUT, PATCH, DELETE);
+HttpRequest.cookies: Um dicionário que contém todos os cookies da requisição.
+Há diversos outros metadados que podem ser obtidos com o objeto request no Django. Todos eles podem ser vistos por meio da sua documentação oficial no seguinte link: https://docs.djangoproject.com/en/2.1/ref/request-response/#httprequest-objects
+
+Entendendo o parâmetro response
+Assim como toda view recebe um objeto do tipo request como parâmetro, ela é obrigada a retornar um objeto response. Diferente do request que é criado automaticamente pelo Django, o response é de responsabilidade do programador.
+
+Basicamente sua função é retornar alguma informação para o usuário, seja uma lista de usuários cadastrados ou uma mensagem de erro. Qualquer informação que deva ser passada da view para o template utiliza o response.
+
+Todos os recursos do objeto response podem ser vistos através da documentação do Django no seguinte link: https://docs.djangoproject.com/en/2.1/ref/request-response/#httpresponse-objects
